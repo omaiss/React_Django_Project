@@ -1,0 +1,7 @@
+omais
+omaisafzal225@gmail.com
+pass : djangointern
+
+
+commands:
+python manage.py runserver
