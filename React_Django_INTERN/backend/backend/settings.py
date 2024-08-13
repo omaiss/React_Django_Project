@@ -127,7 +127,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://192.168.108.1:3000',
+    'http://localhost:3000',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = [
@@ -138,3 +138,11 @@ CORS_ALLOW_METHODS = [
     'PATCH',
     'OPTIONS',
 ]
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'omaisafzal987@gmail.com'
+EMAIL_HOST_PASSWORD = 'cmtx prpn dnqx ryxx' 
