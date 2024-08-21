@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .serializers import UserViewSerializer
+from .serializers import UserViewSerializer, CustomUserAddSerializer
 from rest_framework.serializers import Serializer
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User
+from .models import User, Custom_User
 from rest_framework.views import APIView
 from .emails import send_otp
 from django.contrib.auth import authenticate, login
@@ -95,9 +95,35 @@ class UserLogin(APIView):
         email = request.data['email']
         password = request.data['password']
         user = User.objects.filter(email=email, password=password).values()
-        print(user.query)
         if user.exists():
             return JsonResponse({'status': 200, 'message': 'Login successful'}, status=200)
         else:
             return JsonResponse({'status': 400, 'message': 'Invalid credentials'}, status=400)    
+        
+        
+class CustomUserAdd(APIView):
+    def post(self, request):
+        data = request.data
+        # full_name = data['full_name']
+        email = data['email']
+        # position = data['position']
+        # job = data['job']
+        # department = data['department']
+        if Custom_User.objects.filter(email=email):
+            return Response({
+              'status':400,
+              'message': 'Custom User already exists!',
+            }, status=400)
+        
+        serializer = CustomUserAddSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            print(f'User added with crenditials: {serializer.data}')
+            return Response({
+                'status': 200,
+                'message': 'Custom User added successfully!',
+            }, status=200)
+            
+        
+
         
