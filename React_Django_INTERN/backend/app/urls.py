@@ -7,4 +7,5 @@ urlpatterns = [
     path('userverify/', views.VerifyOTP.as_view()),
     path('resendotp/', views.Resend_OTP.as_view()),
     path('userlogin/', views.UserLogin.as_view()),
+    path('customuseradd/', views.CustomUserAdd.as_view()),
 ]

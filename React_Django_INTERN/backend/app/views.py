@@ -20,14 +20,14 @@ class UserAdd(APIView):
             data = request.data
             serializer = UserViewSerializer(data = data)
             if serializer.is_valid():
-                if User.objects.filter(email = serializer.validated_data['email']):
+                if User.objects.filter(email = serializer.validated_data['email']): # type: ignore
                     return Response({
                         'status':400,
                         'message': 'User already exists!',
                         'data':serializer.errors
                     })                
                 serializer.save()
-                send_otp(serializer.data['email'])
+                send_otp(serializer.data['email']) # type: ignore
                 return Response({
                     'status':200,
                     'message':'Registration success!',
@@ -103,26 +103,28 @@ class UserLogin(APIView):
         
 class CustomUserAdd(APIView):
     def post(self, request):
-        data = request.data
-        # full_name = data['full_name']
-        email = data['email']
-        # position = data['position']
-        # job = data['job']
-        # department = data['department']
-        if Custom_User.objects.filter(email=email):
-            return Response({
-              'status':400,
-              'message': 'Custom User already exists!',
-            }, status=400)
-        
-        serializer = CustomUserAddSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            print(f'User added with crenditials: {serializer.data}')
-            return Response({
-                'status': 200,
-                'message': 'Custom User added successfully!',
-            }, status=200)
+        try:
+            data = request.data
+            email = data['email']
+            if Custom_User.objects.filter(email=email):
+                return Response({
+                'status':400,
+                'message': 'Custom User already exists!',
+                }, status=400)
+            print(data)
+            serializer = CustomUserAddSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                print(f'User added with crenditials: {serializer.data}')
+                return Response({
+                    'status': 200,
+                    'message': 'Custom User added successfully!',
+                }, status=200)
+        except Exception as e:
+                return Response({
+                'status':400,
+                'message': 'Invalid Credentials',
+                }, status=400)
             
         
 
